@@ -46,7 +46,7 @@ app.post('/ifttt/v1/triggers/new_thing_created', (req, res) => {
   if (typeof IFTTTServiceKey !== "string" || IFTTTServiceKey === "INVALID") {
     res.status(401).send({
       errors: [{
-        "message": "Invalid IFTTT Service Key"  
+        "message": "Invalid IFTTT Service Key"
       }]
     });
   };
@@ -80,8 +80,30 @@ app.post('/ifttt/v1/triggers/new_thing_created', (req, res) => {
 
 });
 
-var UTILS = (function () {
+app.post('/ifttt/v1/actions/create_new_thing', (req,res) => {
 
+  const IFTTTServiceKey = req.get("IFTTT-Service-Key");
+
+  if (typeof IFTTTServiceKey !== "string" || IFTTTServiceKey === "INVALID") {
+    res.status(401).send({
+      errors: [{
+        "message": "Invalid IFTTT Service Key"
+      }]
+    });
+  };
+
+  const timestamp = Math.floor(Date.now() / 1000);
+  
+  let data = [{
+    id: timestamp
+  }];
+
+  res.status(200).send({
+    "data": data
+  });
+});
+
+var UTILS = (function () {
   return {
     guid: function () {
       function s4() {
@@ -92,7 +114,6 @@ var UTILS = (function () {
       return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
   };
-
 }());
 
 app.listen(3000, () => {
