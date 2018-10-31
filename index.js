@@ -14,9 +14,29 @@ app.get('/ifttt/v1/status', (req, res) => {
   if (typeof IFTTTServiceKey !== "string" || IFTTTServiceKey === "INVALID") {
     res.status(401).send();
   } else {
-    res.status(200).send();  
+    res.status(200).send();
   }
 
+});
+
+// Test setup endpoint
+app.post('/ifttt/v1/test/setup', (req, res) => {
+
+  const IFTTTServiceKey = req.get("IFTTT-Service-Key");
+
+  if (typeof IFTTTServiceKey !== "string" || IFTTTServiceKey === "INVALID") {
+    res.status(401).send();
+  } else {
+    res.status(200).send({
+      data: {
+        samples: {
+          triggers: {
+            "new_thing_created": "Test"
+          }
+        }
+      }
+    });
+  }
 });
 
 app.listen(3000, () => {
